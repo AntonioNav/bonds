@@ -79,10 +79,12 @@ export default function SearchBar() {
   if (!vaultId) return null;
 
   return (
-    // Fix: Don't nest <Input prefix={...}> inside AutoComplete — it causes double-input
-    // rendering when the component re-renders with value changes. Using AutoComplete's
-    // own props (placeholder, allowClear) avoids the issue entirely. The search icon
-    // is applied via a CSS class on the wrapper.
+    // Fix: Don't nest <Input> inside AutoComplete — it causes double-input rendering
+    // (text appears both inside and outside the input box). Use AutoComplete's own
+    // props (placeholder, allowClear, variant) with a CSS-positioned search icon.
+    // The icon uses pointer-events:none so clicks pass through to the input.
+    // Bug #59 fix: padding-left on the input must be >= icon left + icon size + gap
+    // to prevent text/icon overlap.
     <div className="bonds-search-bar">
       <SearchOutlined className="bonds-search-bar-icon" />
       <AutoComplete
@@ -95,6 +97,8 @@ export default function SearchBar() {
         allowClear
         style={{ width: "100%" }}
         variant="borderless"
+        popupMatchSelectWidth={280}
+        classNames={{ popup: { root: "bonds-search-dropdown" } }}
       />
     </div>
   );

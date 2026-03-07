@@ -81,7 +81,10 @@
       "passkey": "使用通行密钥登录",
       "passkey_failed": "通行密钥认证失败",
       "passkey_not_supported": "此设备不支持通行密钥",
-      "failed": "登录失败"
+      "failed": "登录失败",
+      "hero_title": "用心维护每一段重要的关系",
+      "hero_subtitle": "属于你的私人空间，铭记每个细节、每个瞬间、每份联结。",
+      "footer_by": "由"
     },
     "register": {
       "title": "创建账户",
@@ -97,7 +100,9 @@
       "submit": "创建账户",
       "has_account": "已有账户？",
       "sign_in": "立即登录",
-      "failed": "注册失败"
+      "failed": "注册失败",
+      "hero_title": "开启有意义的人际连接之旅",
+      "hero_subtitle": "一个私密的个人空间，珍藏你生命中的每一个人。"
     }
   },
   "vault": {

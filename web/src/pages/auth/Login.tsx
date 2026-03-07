@@ -250,13 +250,13 @@ export default function Login() {
             fontSize: 34, fontWeight: 400, color: "#fff", lineHeight: 1.3, fontFamily: "\x27Playfair Display\x27, serif",
             margin: "0 0 16px 0", letterSpacing: "-0.01em",
           }}>
-            {t("auth.login.hero_title", { defaultValue: "Nurture the relationships that matter most" })}
+            {t("auth.login.hero_title")}
           </h1>
           <p style={{
             fontSize: 15, color: "rgba(255,255,255,0.7)", lineHeight: 1.7,
             margin: 0, fontWeight: 400,
           }}>
-            {t("auth.login.hero_subtitle", { defaultValue: "Your personal space to remember every detail, every moment, every connection." })}
+            {t("auth.login.hero_subtitle")}
           </p>
 
           {/* Decorative line */}
@@ -386,7 +386,7 @@ export default function Login() {
           © {new Date().getFullYear()}{" "}
           <a href="https://github.com/naiba/bonds" target="_blank" rel="noopener noreferrer" style={{ color: token.colorTextTertiary }}>Bonds</a>
           {instanceInfo?.version && ` ${instanceInfo.version}`}
-          {" by "}
+          {" " + t("auth.login.footer_by") + " "}
           <a href="https://nai.ba" target="_blank" rel="noopener noreferrer" style={{ color: token.colorTextTertiary }}>naiba</a>
         </div>
       </div>

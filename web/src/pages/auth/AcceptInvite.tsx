@@ -150,7 +150,7 @@ export default function AcceptInvite() {
       <div style={{ textAlign: "center", marginTop: 24, color: themeToken.colorTextQuaternary, fontSize: 12 }}>
         © {new Date().getFullYear()}{" "}
         <a href="https://github.com/naiba/bonds" target="_blank" rel="noopener noreferrer" style={{ color: themeToken.colorTextTertiary }}>Bonds</a>
-        {" by "}
+        {" " + t("auth.login.footer_by") + " "}
         <a href="https://nai.ba" target="_blank" rel="noopener noreferrer" style={{ color: themeToken.colorTextTertiary }}>naiba</a>
       </div>
     </div>

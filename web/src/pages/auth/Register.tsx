@@ -281,13 +281,13 @@ export default function Register() {
             fontSize: 34, fontWeight: 400, color: "#fff", lineHeight: 1.3, fontFamily: "\x27Playfair Display\x27, serif",
             margin: "0 0 16px 0", letterSpacing: "-0.01em",
           }}>
-            {t("auth.register.hero_title", { defaultValue: "Begin your journey of meaningful connections" })}
+            {t("auth.register.hero_title")}
           </h1>
           <p style={{
             fontSize: 15, color: "rgba(255,255,255,0.7)", lineHeight: 1.7,
             margin: 0, fontWeight: 400,
           }}>
-            {t("auth.register.hero_subtitle", { defaultValue: "A private, personal space to cherish the people in your life." })}
+            {t("auth.register.hero_subtitle")}
           </p>
 
           {/* Decorative line */}
@@ -399,7 +399,7 @@ export default function Register() {
         }}>
           © {new Date().getFullYear()}{" "}
           <a href="https://github.com/naiba/bonds" target="_blank" rel="noopener noreferrer" style={{ color: token.colorTextTertiary }}>Bonds</a>
-          {" by "}
+          {" " + t("auth.login.footer_by") + " "}
           <a href="https://nai.ba" target="_blank" rel="noopener noreferrer" style={{ color: token.colorTextTertiary }}>naiba</a>
         </div>
       </div>

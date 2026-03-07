@@ -57,7 +57,6 @@ export default function Layout() {
   const nameOrder = useNameOrder();
   const { t, i18n } = useTranslation();
   const { themeMode, setThemeMode } = useTheme();
-
   const themeModeOrder: ThemeMode[] = ["light", "dark", "system"];
   const themeModeIcons: Record<ThemeMode, React.ReactNode> = {
     light: <SunOutlined />,
@@ -221,7 +220,7 @@ export default function Layout() {
             <SearchBar />
           </div>
 
-          {/* Right side: actions — never shrink */}
+          {/* Right side: actions — hidden on mobile when search is expanded */}
           <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
             <Tooltip title={themeModeLabels[themeMode]}>
               <Button type="text" size="small" icon={themeModeIcons[themeMode]} onClick={nextThemeMode} />

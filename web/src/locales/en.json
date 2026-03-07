@@ -81,7 +81,10 @@
       "passkey": "Sign in with Passkey",
       "passkey_failed": "Passkey authentication failed",
       "passkey_not_supported": "Passkey is not supported on this device",
-      "failed": "Login failed"
+      "failed": "Login failed",
+      "hero_title": "Nurture the relationships that matter most",
+      "hero_subtitle": "Your personal space to remember every detail, every moment, every connection.",
+      "footer_by": "by"
     },
     "register": {
       "title": "Create an account",
@@ -97,7 +100,9 @@
       "submit": "Create account",
       "has_account": "Already have an account?",
       "sign_in": "Sign in",
-      "failed": "Registration failed"
+      "failed": "Registration failed",
+      "hero_title": "Begin your journey of meaningful connections",
+      "hero_subtitle": "A private, personal space to cherish the people in your life."
     }
   },
   "vault": {

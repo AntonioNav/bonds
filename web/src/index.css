@@ -224,7 +224,11 @@ html[data-theme="dark"] .vault-nav-divider {
   background: rgba(255,255,255,0.06);
 }
 
-/* Animated SearchBar wrapper */
+/* SearchBar wrapper — constrains width and animates on focus.
+   Search icon is absolutely positioned; input text is pushed right
+   via padding-left to avoid overlap (Bug #59 fix).
+   Uses borderless variant (not filled) because Ant Design's filled variant
+   renders a duplicate text node alongside the input, causing double-text bug. */
 .bonds-search-bar {
   position: relative;
   display: flex;
@@ -232,16 +236,36 @@ html[data-theme="dark"] .vault-nav-divider {
   min-width: 120px;
   max-width: 280px;
   flex: 1;
-  transition: max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 8px;
+  /* Override header's line-height to keep search bar compact */
+  line-height: normal;
+  transition: max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+             background 0.3s;
+}
+/* Ant Design Select adds vertical padding that inflates search bar height.
+   Override to keep it compact within the header. */
+.bonds-search-bar .ant-select {
+  padding: 0 !important;
 }
 
 .bonds-search-bar:focus-within {
   max-width: 320px;
+  background: rgba(0, 0, 0, 0.06);
 }
 
+html[data-theme="dark"] .bonds-search-bar {
+  background: rgba(255, 255, 255, 0.08);
+}
+html[data-theme="dark"] .bonds-search-bar:focus-within {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Search icon — absolutely positioned inside the wrapper so it overlays
+   the input. pointer-events:none lets clicks pass through to the input. */
 .bonds-search-bar-icon {
   position: absolute;
-  left: 12px;
+  left: 7px;
   z-index: 1;
   color: rgba(0, 0, 0, 0.3);
   font-size: 13px;
@@ -249,21 +273,63 @@ html[data-theme="dark"] .vault-nav-divider {
   transition: color 0.3s;
 }
 
-/* Fix #59: prevent placeholder text from overlapping the absolutely-positioned search icon.
-   The icon is at left: 12px with 13px font-size, so text must start after ~25px.
-   Ant Design AutoComplete uses an input element; we push its text right. */
-.bonds-search-bar .ant-input {
-  padding-left: 22px !important;
-}
+/* Bug #59 fix: push input text right so it doesn't overlap the search icon.
+   Icon at left:7px, box-width 13px (right edge ~20px from bar-left).
+   .ant-select padding zeroed so input aligns with bar edge.
+   padding-left:27px → ~7px gap from icon right to text ≈ 7px icon-to-left. */
+.bonds-search-bar .ant-select-selection-search-input,
 .bonds-search-bar input {
-  padding-left: 22px !important;
+  padding-left: 24px !important;
 }
+/* Ant Design v6 AutoComplete places a bare text node inside .ant-select-content
+   as a width-measuring mirror, alongside the actual <input>. This text node is
+   visible by default, causing "double text" rendering. Hide it with font-size:0
+   which is more reliable than color:transparent since Ant Design's CSS-in-JS
+   can override color but not font-size on this element. The input inside
+   restores normal font-size. */
+.bonds-search-bar .ant-select-content {
+  font-size: 0 !important;
+  color: transparent !important;
+  /* font-size:0 collapses container height, so set min-height to keep
+     the search bar clickable. */
+  min-height: 30px;
+}
+.bonds-search-bar .ant-select-content input {
+  font-size: 14px !important;
+  color: rgba(0, 0, 0, 0.88) !important;
+  /* Reduce vertical space to keep search bar compact in the header.
+     Ant Design sets line-height:40px by default which inflates height. */
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  line-height: 22px !important;
+}
+/* Also offset the placeholder text to match */
+.bonds-search-bar .ant-select-selection-placeholder {
+  padding-left: 24px !important;
+}
+
 .bonds-search-bar:focus-within .bonds-search-bar-icon {
   color: #4a7c59;
 }
 
 html[data-theme="dark"] .bonds-search-bar-icon {
   color: rgba(255, 255, 255, 0.3);
+}
+html[data-theme="dark"] .bonds-search-bar:focus-within .bonds-search-bar-icon {
+  color: #7ec496;
+}
+html[data-theme="dark"] .bonds-search-bar .ant-select-content input {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Search dropdown — ensure minimum width and solid background so results
+   don't get clipped and underlying page elements don't bleed through. */
+.bonds-search-dropdown {
+  min-width: 280px !important;
+  background: #fff !important;
+}
+html[data-theme="dark"] .bonds-search-dropdown {
+  background: #1f1f1f !important;
 }
 
 /* Empty state styling */
