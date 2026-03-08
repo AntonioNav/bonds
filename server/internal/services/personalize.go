@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/naiba/bonds/internal/dto"
+	"github.com/naiba/bonds/internal/i18n"
 	"gorm.io/gorm"
 )
 
@@ -175,4 +176,64 @@ func (s *PersonalizeService) ListTemplates(accountID string) ([]map[string]inter
 		return nil, err
 	}
 	return results, nil
+}
+
+type syncMapping struct {
+	Table       string
+	Col         string
+	KeyCol      string
+	ParentTable string
+	JoinCol     string
+}
+
+func (s *PersonalizeService) SyncTranslations(accountID, locale string) error {
+	mappings := []syncMapping{
+		{Table: "genders", Col: "name", KeyCol: "name_translation_key"},
+		{Table: "pronouns", Col: "name", KeyCol: "name_translation_key"},
+		{Table: "address_types", Col: "name", KeyCol: "name_translation_key"},
+		{Table: "pet_categories", Col: "name", KeyCol: "name_translation_key"},
+		{Table: "contact_information_types", Col: "name", KeyCol: "name_translation_key"},
+		{Table: "call_reason_types", Col: "label", KeyCol: "label_translation_key"},
+		{Table: "call_reasons", Col: "label", KeyCol: "label_translation_key", ParentTable: "call_reason_types", JoinCol: "call_reason_type_id"},
+		{Table: "religions", Col: "name", KeyCol: "translation_key"},
+		{Table: "gift_occasions", Col: "label", KeyCol: "label_translation_key"},
+		{Table: "gift_states", Col: "label", KeyCol: "label_translation_key"},
+		{Table: "group_types", Col: "label", KeyCol: "label_translation_key"},
+		{Table: "group_type_roles", Col: "label", KeyCol: "label_translation_key", ParentTable: "group_types", JoinCol: "group_type_id"},
+		{Table: "post_templates", Col: "label", KeyCol: "label_translation_key"},
+		{Table: "relationship_group_types", Col: "name", KeyCol: "name_translation_key"},
+		{Table: "relationship_types", Col: "name", KeyCol: "name_translation_key", ParentTable: "relationship_group_types", JoinCol: "relationship_group_type_id"},
+		{Table: "relationship_types", Col: "name_reverse_relationship", KeyCol: "name_reverse_relationship_translation_key", ParentTable: "relationship_group_types", JoinCol: "relationship_group_type_id"},
+		{Table: "emotions", Col: "name", KeyCol: "name_translation_key"},
+		{Table: "templates", Col: "name", KeyCol: "name_translation_key"},
+		{Table: "template_pages", Col: "name", KeyCol: "name_translation_key", ParentTable: "templates", JoinCol: "template_id"},
+		{Table: "modules", Col: "name", KeyCol: "name_translation_key"},
+	}
+
+	return s.db.Transaction(func(tx *gorm.DB) error {
+		for _, m := range mappings {
+			var rows []map[string]interface{}
+			query := tx.Table(m.Table).Select("id", m.KeyCol).Where(m.KeyCol + " IS NOT NULL")
+
+			if m.ParentTable != "" {
+				query = query.Where(fmt.Sprintf("%s IN (SELECT id FROM %s WHERE account_id = ?)", m.JoinCol, m.ParentTable), accountID)
+			} else {
+				query = query.Where("account_id = ?", accountID)
+			}
+
+			if err := query.Find(&rows).Error; err != nil {
+				return err
+			}
+
+			for _, row := range rows {
+				id := row["id"]
+				key := row[m.KeyCol].(string)
+				translated := i18n.T(locale, key)
+				if err := tx.Table(m.Table).Where("id = ?", id).Update(m.Col, translated).Error; err != nil {
+					return err
+				}
+			}
+		}
+		return nil
+	})
 }

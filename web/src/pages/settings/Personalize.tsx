@@ -15,10 +15,10 @@ import {
   Select,
   Switch,
 } from "antd";
-import { PlusOutlined, DeleteOutlined, EditOutlined, RightOutlined, DownOutlined, AppstoreOutlined, ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined, EditOutlined, RightOutlined, DownOutlined, AppstoreOutlined, ArrowUpOutlined, ArrowDownOutlined, SyncOutlined } from "@ant-design/icons";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { api } from "@/api";
+import { api, httpClient } from "@/api";
 import type { PersonalizeItem, APIError, Currency } from "@/api";
 
 const { Title, Text } = Typography;
@@ -768,15 +768,44 @@ export default function Personalize() {
     ),
     children: key === "currencies" ? <CurrenciesPanel /> : <SectionPanel sectionKey={key} />,
   }));
+  const queryClient = useQueryClient();
+  const { message } = App.useApp();
+
+  const syncMutation = useMutation({
+    mutationFn: () => httpClient.instance.post("/settings/personalize/sync"),
+    onSuccess: () => {
+      message.success(t("settings.personalize.sync_success"));
+      queryClient.invalidateQueries({ queryKey: ["settings", "personalize"] });
+    },
+    onError: (e: any) => message.error(e.message || "Sync failed"),
+  });
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto" }}>
-      <Title level={4} style={{ marginBottom: 4 }}>
-        {t("settings.personalize.title")}
-      </Title>
-      <Text type="secondary" style={{ display: "block", marginBottom: 24 }}>
-        {t("settings.personalize.description")}
-      </Text>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
+        <div>
+          <Title level={4} style={{ marginBottom: 4 }}>
+            {t("settings.personalize.title")}
+          </Title>
+          <Text type="secondary" style={{ display: "block" }}>
+            {t("settings.personalize.description")}
+          </Text>
+        </div>
+        <Popconfirm
+          title={t("settings.personalize.sync_translations")}
+          description={t("settings.personalize.sync_confirm")}
+          onConfirm={() => syncMutation.mutate()}
+          okText={t("common.update")}
+          cancelText={t("common.cancel")}
+        >
+          <Button
+            icon={<SyncOutlined />}
+            loading={syncMutation.isPending}
+          >
+            {t("settings.personalize.sync_translations")}
+          </Button>
+        </Popconfirm>
+      </div>
 
       <Card
         styles={{

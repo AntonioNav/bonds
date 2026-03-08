@@ -159,3 +159,23 @@ func (h *PersonalizeHandler) Delete(c echo.Context) error {
 	}
 	return response.NoContent(c)
 }
+
+// Sync godoc
+//
+//	@Summary		Sync translations
+//	@Description	Synchronize default seeded entities with their translations in the current locale
+//	@Tags			personalize
+//	@Security		BearerAuth
+//	@Success		200	{object}	response.APIResponse
+//	@Failure		401	{object}	response.APIResponse
+//	@Failure		500	{object}	response.APIResponse
+//	@Router			/settings/personalize/sync [post]
+func (h *PersonalizeHandler) Sync(c echo.Context) error {
+	accountID := middleware.GetAccountID(c)
+	locale := middleware.GetLocale(c)
+
+	if err := h.personalizeService.SyncTranslations(accountID, locale); err != nil {
+		return response.InternalError(c, "err.failed_to_sync_translations")
+	}
+	return response.OK(c, nil)
+}

@@ -921,7 +921,11 @@
             "search_currencies": "Buscar monedas...",
             "currency_toggled": "Moneda cambiada",
             "all_enabled": "Todas las monedas habilitadas",
-            "all_disabled": "Todas las monedas deshabilitadas"
+            "all_disabled": "Todas las monedas deshabilitadas",
+            "sync_translations": "Sincronizar traducciones",
+            "sync_translations_desc": "Actualiza las etiquetas por defecto para que coincidan con tu idioma actual.",
+            "sync_success": "Traducciones sincronizadas con éxito",
+            "sync_confirm": "Esto actualizará todas las etiquetas por defecto para que coincidan con tu idioma actual. Las etiquetas personalizadas no se verán afectadas. ¿Continuar?"
         },
         "users": {
             "title": "Usuarios",
